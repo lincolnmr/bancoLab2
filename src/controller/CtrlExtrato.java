@@ -63,14 +63,14 @@ public class CtrlExtrato {
         return objExtratoto.toArray();
     }
     
-    public static String[] recuperar(int codigoExtrato, Connection conexao) {
-        Extrato objExtrato = DAOextrato.recuperar(codigoExtrato, conexao);
+    public static String[] recuperar(int codigoConta, Connection conexao) {
+        Extrato objExtrato = DAOextrato.recuperar(codigoConta, conexao);
         return objExtrato.toArray();
     }
     
-    public static String[][] recuperarTodos(Connection conexao){
+    public static String[][] recuperarTodos(int codigoConta, Connection conexao){
 
-        ArrayList<Extrato> lista = DAOextrato.recuperarTodos(conexao);
+        ArrayList<Extrato> lista = DAOextrato.recuperarTodos(codigoConta, conexao);
 
         String[][] matrizReturn = null;
         matrizReturn = new String[lista.size()][6];

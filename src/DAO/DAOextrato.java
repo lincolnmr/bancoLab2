@@ -95,19 +95,19 @@ public class DAOextrato {
         return false;
     }
     
-    public static Extrato recuperar(int codigoExtrato) {
+    public static Extrato recuperar(int codigoConta) {
         Connection conexao = Fabrica.getConexaoSINGLETON();
-        return recuperar(codigoExtrato, conexao);
+        return recuperar(codigoConta, conexao);
     }
     
-    public static Extrato recuperar(int codigoExtrato, Connection conexao) {
+    public static Extrato recuperar(int codigoConta, Connection conexao) {
 
-        String sql = "SELECT * FROM TBL_EXTRATO where codigo_extrato  = ?";
+        String sql = "SELECT * FROM TBL_EXTRATO WHERE extrato_codigo_conta  = ?";
         Extrato obj = null;
 
         try {
             PreparedStatement ST = conexao.prepareStatement(sql);
-            ST.setInt(1, codigoExtrato);
+            ST.setInt(1, codigoConta);
             ResultSet objResultSet = ST.executeQuery();     
             objResultSet.next();
             
@@ -125,16 +125,17 @@ public class DAOextrato {
         return obj;
     }
     
-    public static ArrayList<Extrato> recuperarTodos(Connection conexao) {
+    public static ArrayList<Extrato> recuperarTodos(int codConta, Connection conexao) {
 
-        String sql = "SELECT codigoExtrato_extrato, descricao_extrato , data_extrato, "
-                        + "tipo_extrato, valor_extrato, extrato_codigoExtrato_conta "
-                    + "FROM TBL_EXTRATO";
+        String sql = "SELECT codigo_extrato, descricao_extrato , data_extrato,"
+                        + "tipo_extrato, valor_extrato FROM TBL_EXTRATO WHERE extrato_codigo_conta = ?";
+        
         Extrato obj = null;
         ArrayList<Extrato> lista = new ArrayList<>();
 
         try {
             PreparedStatement ST = (PreparedStatement) conexao.prepareStatement(sql);
+            ST.setInt(1, codConta);
             ResultSet objResultSet = ST.executeQuery();
 
             while(objResultSet.next()) {
