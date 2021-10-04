@@ -68,7 +68,6 @@ public class DAOconta {
 
         try {
             PreparedStatement ST = (PreparedStatement) conexao.prepareStatement(sql);
-
             ST.setInt(1, codigoConta);
             ST.execute();
 

@@ -19,9 +19,8 @@ public class DAOextrato {
         
         try {
             PreparedStatement sql = conexao.prepareStatement( 
-                    "INSERT INTO "
-                        + "TBL_EXTRATO (codigoExtrato_extrato, descricao_extrato , data_extrato, tipo_extrato, valor_extrato, extrato_codigoExtrato_conta) "
-                        + "VALUES (?,?,?,?,?,?)");
+                    "INSERT INTO TBL_EXTRATO (descricao_extrato , data_extrato, tipo_extrato, "
+                            + "valor_extrato, extrato_codigo_conta) VALUES (?,?,?,?,?)");
             
             sql.setInt(1, obj.getCodigoExtrato());
             sql.setString(2, obj.getDescricaoExtrato());
@@ -52,9 +51,9 @@ public class DAOextrato {
                                 + "data_extrato = ?, "
                                 + "tipo_extrato = ?, "
                                 + "valor_extrato = ?, "
-                                + "extrato_codigoExtrato_conta = ? "
+                                + "extrato_codigo_conta = ? "
                              + "WHERE "
-                                + "codigoExtrato_extrato = ?";
+                                + "codigo_extrato = ?";
 
             PreparedStatement sql = conexao.prepareStatement(sqlUpdate);
 
@@ -87,6 +86,7 @@ public class DAOextrato {
             PreparedStatement ST = (PreparedStatement) conexao.prepareStatement(sql);
             ST.setInt(1, codigoExtrato);
             ST.execute();
+            
             System.out.println("Excluido");
             return true;
         } catch (SQLException err) {
@@ -125,10 +125,9 @@ public class DAOextrato {
         return obj;
     }
     
-    public static ArrayList<Extrato> recuperarTodos(int codConta, Connection conexao) {
+    public static ArrayList<Extrato> recuperarExtratoConta(int codConta, Connection conexao) {
 
-        String sql = "SELECT codigo_extrato, descricao_extrato , data_extrato,"
-                        + "tipo_extrato, valor_extrato FROM TBL_EXTRATO WHERE extrato_codigo_conta = ?";
+        String sql = "SELECT codigo_extrato, descricao_extrato , data_extrato, tipo_extrato, valor_extrato, extrato_codigo_conta FROM TBL_EXTRATO WHERE extrato_codigo_conta = ?";
         
         Extrato obj = null;
         ArrayList<Extrato> lista = new ArrayList<>();
@@ -137,6 +136,10 @@ public class DAOextrato {
             PreparedStatement ST = (PreparedStatement) conexao.prepareStatement(sql);
             ST.setInt(1, codConta);
             ResultSet objResultSet = ST.executeQuery();
+            
+            for (int i = 0; i < lista.size(); i++) {
+                System.out.println(lista.get(i));
+            }
 
             while(objResultSet.next()) {
 

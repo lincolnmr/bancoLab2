@@ -16,7 +16,7 @@ public class CtrlConta {
             obj.setAgenciaConta(dados[2]);
             obj.setSaldoConta(Double.parseDouble(dados[3]));            
 
-            if (!verifica(obj.getCodigoConta())){
+            if ("0".equals(dados[0])){
                 DAO.DAOconta.insert(obj);
             } else {
                 DAO.DAOconta.update(obj);
@@ -36,7 +36,7 @@ public class CtrlConta {
             obj.setAgenciaConta(dados[2]);
             obj.setSaldoConta(Double.parseDouble(dados[3]));            
 
-            if (!verifica(obj.getCodigoConta())){
+            if ("0".equals(dados[0])){
                 DAO.DAOconta.insert(obj, conexao);
             } else {
                 DAO.DAOconta.update(obj, conexao);

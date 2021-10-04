@@ -19,7 +19,7 @@ public class CtrlExtrato {
             obj.setValorExtrato(Double.parseDouble(dados[4]));
             obj.setExtratoCodigoConta(Integer.parseInt(dados[5]));   
 
-            if (!verifica(obj.getCodigoExtrato())){
+            if ("0".equals(dados[0])){
                 DAO.DAOextrato.insert(obj);
             } else {
                 DAO.DAOextrato.update(obj);
@@ -40,7 +40,7 @@ public class CtrlExtrato {
             obj.setValorExtrato(Double.parseDouble(dados[4]));
             obj.setExtratoCodigoConta(Integer.parseInt(dados[5]));   
 
-            if (!verifica(obj.getCodigoExtrato())){
+            if ("0".equals(dados[0])){
                 DAO.DAOextrato.insert(obj, conexao);
             } else {
                 DAO.DAOextrato.update(obj, conexao);
@@ -55,7 +55,7 @@ public class CtrlExtrato {
     }
     
     public static boolean excluir(int codigoExtrato, Connection conexao) {
-        return DAOextrato.excluir(codigoExtrato);
+        return DAOextrato.excluir(codigoExtrato, conexao);
     }
 
     public static String[] recuperar(int codigoExtrato) {
@@ -68,9 +68,9 @@ public class CtrlExtrato {
         return objExtrato.toArray();
     }
     
-    public static String[][] recuperarTodos(int codigoConta, Connection conexao){
+    public static String[][] recuperarExtratoConta(int codigoConta, Connection conexao){
 
-        ArrayList<Extrato> lista = DAOextrato.recuperarTodos(codigoConta, conexao);
+        ArrayList<Extrato> lista = DAOextrato.recuperarExtratoConta(codigoConta, conexao);
 
         String[][] matrizReturn = null;
         matrizReturn = new String[lista.size()][6];

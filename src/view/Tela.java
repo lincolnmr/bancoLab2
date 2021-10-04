@@ -55,7 +55,6 @@ public class Tela extends javax.swing.JFrame {
         jTFData = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTADescricao = new javax.swing.JTextArea();
-        jTFTipo = new javax.swing.JTextField();
         jTFValor = new javax.swing.JTextField();
         jTFCodConta = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -64,6 +63,7 @@ public class Tela extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jBENovo = new javax.swing.JButton();
+        jCBTipo = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -296,8 +296,6 @@ public class Tela extends javax.swing.JFrame {
         jTADescricao.setRows(5);
         jScrollPane3.setViewportView(jTADescricao);
 
-        jTFTipo.setText("                    ");
-
         jTFValor.setText("                         ");
 
         jTFCodConta.setText("                    ");
@@ -319,6 +317,8 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
+        jCBTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nenhum", "E", "S" }));
+
         javax.swing.GroupLayout jPaExtratoLayout = new javax.swing.GroupLayout(jPaExtrato);
         jPaExtrato.setLayout(jPaExtratoLayout);
         jPaExtratoLayout.setHorizontalGroup(
@@ -338,15 +338,15 @@ public class Tela extends javax.swing.JFrame {
                         .addGap(38, 38, 38)
                         .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
-                            .addComponent(jTFTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                            .addComponent(jCBTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(38, 38, 38)
                         .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
                             .addComponent(jTFValor, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addGap(38, 38, 38)
                         .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(jTFCodConta, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTFCodConta, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPaExtratoLayout.createSequentialGroup()
@@ -378,12 +378,11 @@ public class Tela extends javax.swing.JFrame {
                             .addComponent(jLabel8)
                             .addComponent(jLabel9))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTFTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTFCodConta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jTFValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTFCodConta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTFValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCBTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jBEGravar)
@@ -438,11 +437,11 @@ public class Tela extends javax.swing.JFrame {
             dados[0] = "0";
             dados[1] = jTADescricao.getText();
             dados[2] = jTFData.getText();
-            dados[3] = jTFTipo.getText();
+            dados[3] = String.valueOf(jCBTipo.getSelectedItem());
             dados[4] = jTFValor.getText();
             dados[5] = jTFCodConta.getText();
 
-            CtrlConta.inserir(dados, conexao);
+            CtrlExtrato.inserir(dados, conexao);
         } 
         else {
             dados[0] = (String) jTableExtrato.getValueAt(iLinha, 0);
@@ -548,8 +547,7 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_jBEGravarActionPerformed
 
     private void jBEExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEExcluirActionPerformed
-       int codigoExtrato = Integer.parseInt((String) jTableExtrato.getValueAt(jTableExtrato.getSelectedRow(), 0));
-            
+        int codigoExtrato = Integer.parseInt((String) jTableExtrato.getValueAt(jTableExtrato.getSelectedRow(), 0));
         if (codigoExtrato >= 0) {
             if(JOptionPane.showConfirmDialog(rootPane, "Deseja excluir o registro? ") == 0){
                 CtrlExtrato.excluir(codigoExtrato, conexao);
@@ -569,7 +567,7 @@ public class Tela extends javax.swing.JFrame {
     private void limparTelaExtrato(){
         jTADescricao.setText("");
         jTFData.setText("");
-        jTFTipo.setText("");
+        //jTFTipo.setText("");
         jTFValor.setText("");
         jTFCodConta.setText("");
     }
@@ -592,7 +590,7 @@ public class Tela extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jTableExtrato.getModel();
         model.setNumRows(0);
 
-        String[][] lista = CtrlExtrato.recuperarTodos(codConta, conexao);
+        String[][] lista = CtrlExtrato.recuperarExtratoConta(codConta, conexao);
 
         for (String[] dado : lista) {
             model.addRow(dado);
@@ -647,6 +645,7 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JButton jBExtrato;
     private javax.swing.JButton jBGrava;
     private javax.swing.JButton jBNovo;
+    private javax.swing.JComboBox jCBTipo;
     private javax.swing.JComboBox jComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -669,7 +668,6 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JTextField jTFData;
     private javax.swing.JTextField jTFNumero;
     private javax.swing.JTextField jTFSaldo;
-    private javax.swing.JTextField jTFTipo;
     private javax.swing.JTextField jTFValor;
     private javax.swing.JTable jTableContas;
     private javax.swing.JTable jTableExtrato;
