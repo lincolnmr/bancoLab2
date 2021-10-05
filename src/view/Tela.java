@@ -296,10 +296,6 @@ public class Tela extends javax.swing.JFrame {
         jTADescricao.setRows(5);
         jScrollPane3.setViewportView(jTADescricao);
 
-        jTFValor.setText("                         ");
-
-        jTFCodConta.setText("                    ");
-
         jLabel5.setText("Descrição");
 
         jLabel6.setText("Data");

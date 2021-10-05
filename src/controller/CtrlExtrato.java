@@ -36,7 +36,7 @@ public class CtrlExtrato {
             obj.setCodigoExtrato(Integer.parseInt(dados[0]));
             obj.setDescricaoExtrato(dados[1]);
             obj.setDataExtrato(Funcoes.stringToDate(dados[2]));
-            obj.setTipoExtrato(dados[3]);
+            obj.setTipoExtrato(String.valueOf(dados[3]));
             obj.setValorExtrato(Double.parseDouble(dados[4]));
             obj.setExtratoCodigoConta(Integer.parseInt(dados[5]));   
 

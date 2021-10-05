@@ -19,8 +19,8 @@ public class DAOextrato {
         
         try {
             PreparedStatement sql = conexao.prepareStatement( 
-                    "INSERT INTO TBL_EXTRATO (descricao_extrato , data_extrato, tipo_extrato, "
-                            + "valor_extrato, extrato_codigo_conta) VALUES (?,?,?,?,?)");
+                    "INSERT INTO TBL_EXTRATO (codigo_extrato, descricao_extrato , data_extrato, tipo_extrato, "
+                            + "valor_extrato, extrato_codigo_conta) VALUES (?,?,?,?,?,?)");
             
             sql.setInt(1, obj.getCodigoExtrato());
             sql.setString(2, obj.getDescricaoExtrato());
