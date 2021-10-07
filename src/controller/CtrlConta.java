@@ -1,13 +1,13 @@
 package controller;
 
 import DAO.DAOconta;
-import java.sql.Connection;
 import java.util.ArrayList;
 import model.Conta;
 
 public class CtrlConta {
 
     public static void inserir(String[] dados) {
+        DAOconta dao = new DAOconta();
 
         try {
             Conta obj = new Conta();
@@ -17,29 +17,9 @@ public class CtrlConta {
             obj.setSaldoConta(Double.parseDouble(dados[3]));            
 
             if ("0".equals(dados[0])){
-                DAO.DAOconta.insert(obj);
+                dao.insert(obj);
             } else {
-                DAO.DAOconta.update(obj);
-            }
-             
-        } catch (Exception f) {
-            System.out.println("Erro ao gravar objeto na classe controle: " + f.getMessage());
-        }
-    }
-    
-    public static void inserir(String[] dados, Connection conexao) {
-
-        try {
-            Conta obj = new Conta();
-            obj.setCodigoConta(Integer.parseInt(dados[0]));
-            obj.setNumeroConta(dados[1]);
-            obj.setAgenciaConta(dados[2]);
-            obj.setSaldoConta(Double.parseDouble(dados[3]));            
-
-            if ("0".equals(dados[0])){
-                DAO.DAOconta.insert(obj, conexao);
-            } else {
-                DAO.DAOconta.update(obj, conexao);
+                dao.update(obj);
             }
              
         } catch (Exception f) {
@@ -48,26 +28,19 @@ public class CtrlConta {
     }
 
     public static boolean excluir(int codigoConta) {
-        return DAOconta.excluir(codigoConta);
-    }
-    
-    public static boolean excluir(int codigoConta, Connection conexao) {
-        return DAOconta.excluir(codigoConta, conexao);
+        DAOconta dao = new DAOconta();
+        return dao.excluir(codigoConta);
     }
 
     public static String[] recuperar(int codigoConta) {
-        Conta objContato = DAOconta.recuperar(codigoConta);
+        DAOconta dao = new DAOconta();
+        Conta objContato = dao.recuperar(codigoConta);
         return objContato.toArray();
     }
     
-    public static String[] recuperar(int codigoConta, Connection conexao) {
-        Conta objContato = DAOconta.recuperar(codigoConta, conexao);
-        return objContato.toArray();
-    }
-     
-    public static String[][] recuperarTodos(Connection conexao){
-
-        ArrayList<Conta> lista = DAOconta.recuperarTodos(conexao);
+    public static String[][] recuperarTodos(){
+        DAOconta dao = new DAOconta();
+        ArrayList<Conta> lista = dao.recuperarTodos();
         String[][] matrizReturn = null;
         matrizReturn = new String[lista.size()][4];
 
@@ -76,8 +49,9 @@ public class CtrlConta {
         }
         return matrizReturn;
     }
-   
-    public static boolean verifica(int codigoConta) {
-        return DAOconta.verificar(codigoConta); 
+    
+    public boolean transferir(int contaOrigem, int contaDestino, double valor){
+        
+        return false;
     }
 }

@@ -1,5 +1,6 @@
 package banco;
 
+import DAO.Fabrica;
 import view.Tela;
 
 /**

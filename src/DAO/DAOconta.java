@@ -8,13 +8,18 @@ import java.util.ArrayList;
 import model.Conta;
 
 public class DAOconta {
-
-    public static void insert(Conta obj) {
-        Connection conexao = Fabrica.getConexaoSINGLETON();
-        insert(obj, conexao);
+    
+    private Connection conexao;
+    
+    public DAOconta(){
+        conexao = Fabrica.getConexaoSINGLETON();
     }
     
-    public static void insert(Conta obj, Connection conexao) {
+    public DAOconta(Connection pConexao){
+        conexao = pConexao;
+    }
+
+    public void insert(Conta obj) {
      
         try {
             PreparedStatement sql = conexao.prepareStatement( 
@@ -32,17 +37,12 @@ public class DAOconta {
             System.out.println("Não inserido no DAO - erro: \\n" + ex.getMessage());
         }
     }
-
-    public static void update(Conta obj) {
-        Connection conexao = Fabrica.getConexaoSINGLETON();
-        update(obj, conexao);
-    }
     
-    public static void update(Conta obj, Connection conexao) {
+    public void update(Conta obj) {
 
        try {
             PreparedStatement sql = conexao.prepareStatement("UPDATE TBL_CONTA SET numero_conta = ?, agencia_conta = ?, saldo_conta = ? WHERE codigo_conta = ?");
-
+            
             sql.setString(1, obj.getNumeroConta());
             sql.setString(2, obj.getAgenciaConta());
             sql.setDouble(3, obj.getSaldoConta());
@@ -56,18 +56,11 @@ public class DAOconta {
             System.out.println("Erro ao atualizar conta - DAO \n" + ex.getMessage());
         }
     }
-
-    public static boolean excluir(int codigoConta) {
-        Connection conexao = Fabrica.getConexaoSINGLETON();
-        return excluir(codigoConta, conexao);   
-    }
     
-    public static boolean excluir(int codigoConta, Connection conexao) {
-        
-        String sql = "DELETE FROM TBL_CONTA WHERE codigo_conta = ?";
-
+    public boolean excluir(int codigoConta) {
+       
         try {
-            PreparedStatement ST = (PreparedStatement) conexao.prepareStatement(sql);
+            PreparedStatement ST = (PreparedStatement) conexao.prepareStatement("DELETE FROM TBL_CONTA WHERE codigo_conta = ?");
             ST.setInt(1, codigoConta);
             ST.execute();
 
@@ -79,24 +72,15 @@ public class DAOconta {
         return false;
     }
     
-    public static Conta recuperar(int codigoConta) {
-        Connection conexao = Fabrica.getConexaoSINGLETON();
-        return recuperar(codigoConta, conexao);
-    }
-    
-    public static Conta recuperar(int codigoConta, Connection conexao) {
-
-        String sql = "SELECT * FROM TBL_CONTA WHERE codigo_conta  = ?";
-        Conta obj = null;
+    public Conta recuperar(int codigoConta) {
+        Conta obj = new Conta();
         
         try {
-            PreparedStatement ST = conexao.prepareStatement(sql);
+            PreparedStatement ST = conexao.prepareStatement("SELECT * FROM TBL_CONTA WHERE codigo_conta = ?");
             ST.setInt(1, codigoConta);
-            
             ResultSet objResultSet = ST.executeQuery();
             objResultSet.next();
             
-            obj = new Conta();
             obj.setCodigoConta(objResultSet.getInt("codigo_conta"));
             obj.setNumeroConta(objResultSet.getString("numero_conta"));
             obj.setAgenciaConta(objResultSet.getString("agencia_conta"));
@@ -108,20 +92,16 @@ public class DAOconta {
         return obj;
     }
     
-    public static ArrayList<Conta> recuperarTodos(Connection conexao) {
-
-        String sql = "SELECT codigo_conta, numero_conta, agencia_conta, saldo_conta FROM TBL_CONTA";
+    public  ArrayList<Conta> recuperarTodos(){
         Conta obj = null;
         ArrayList<Conta> lista = new ArrayList<>();
 
         try {
-
-            PreparedStatement ST = (PreparedStatement) conexao.prepareStatement(sql);
-
+            PreparedStatement ST = (PreparedStatement) conexao.prepareStatement(
+                    "SELECT codigo_conta, numero_conta, agencia_conta, saldo_conta FROM TBL_CONTA");
             ResultSet objResultSet = ST.executeQuery();
 
             while(objResultSet.next()) {
-
                 obj = new Conta();
                 obj.setCodigoConta(objResultSet.getInt("codigo_conta"));
                 obj.setNumeroConta(objResultSet.getString("numero_conta"));
@@ -136,21 +116,5 @@ public class DAOconta {
             System.out.println("Erro ao recuperar todos - DAO \n" + ex.getMessage());
         }
         return null;
-    }
-    
-    public static boolean verificar(int codigoConta) {
-        Connection conexao = Fabrica.getConexaoSINGLETON();
-        String sql = "SELECT * FROM TBL_CONTA WHERE codigo_conta  = ?";
-            
-        try {
-            PreparedStatement ST = conexao.prepareStatement(sql);
-            ST.setInt(1, codigoConta);
-            ResultSet objResultSet = ST.executeQuery();
-            if(!objResultSet.next()) return false;
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao verificar - DAO" + e.getMessage());
-        }
-        return true;
     }
 }

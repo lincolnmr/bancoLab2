@@ -9,13 +9,18 @@ import java.util.ArrayList;
 import model.Extrato;
 
 public class DAOextrato {
+    
+    private Connection conexao;
 
-    public static void insert(Extrato obj) {
-        Connection conexao = Fabrica.getConexaoSINGLETON();
-        insert(obj, conexao);
+    public DAOextrato(){
+        conexao = Fabrica.getConexaoSINGLETON();
     }
     
-    public static void insert(Extrato obj, Connection conexao) {
+    public DAOextrato(Connection pConexao){
+        conexao = pConexao;
+    }
+    
+    public void insert(Extrato obj) {
         
         try {
             PreparedStatement sql = conexao.prepareStatement( 
@@ -36,12 +41,7 @@ public class DAOextrato {
         }
     }
 
-    public static void update(Extrato obj) {
-        Connection conexao = Fabrica.getConexaoSINGLETON();
-        update(obj, conexao);
-    }
-    
-    public static void update(Extrato obj, Connection conexao) {
+    public  void update(Extrato obj) {
 
         try {
             String sqlUpdate = "UPDATE "
@@ -73,17 +73,10 @@ public class DAOextrato {
         }
     }
 
-    public static boolean excluir(int codigoExtrato) { 
-        Connection conexao = Fabrica.getConexaoSINGLETON();
-        return excluir(codigoExtrato, conexao);
-    }
-    
-    public static boolean excluir(int codigoExtrato, Connection conexao) {
-        
-        String sql = "DELETE FROM TBL_EXTRATO WHERE codigo_extrato = ?";
+    public  boolean excluir(int codigoExtrato) {
 
         try {
-            PreparedStatement ST = (PreparedStatement) conexao.prepareStatement(sql);
+            PreparedStatement ST = (PreparedStatement) conexao.prepareStatement("DELETE FROM TBL_EXTRATO WHERE codigo_extrato = ?");
             ST.setInt(1, codigoExtrato);
             ST.execute();
             
@@ -95,18 +88,11 @@ public class DAOextrato {
         return false;
     }
     
-    public static Extrato recuperar(int codigoConta) {
-        Connection conexao = Fabrica.getConexaoSINGLETON();
-        return recuperar(codigoConta, conexao);
-    }
-    
-    public static Extrato recuperar(int codigoConta, Connection conexao) {
-
-        String sql = "SELECT * FROM TBL_EXTRATO WHERE extrato_codigo_conta  = ?";
+    public  Extrato recuperar(int codigoConta) {
         Extrato obj = null;
 
         try {
-            PreparedStatement ST = conexao.prepareStatement(sql);
+            PreparedStatement ST = conexao.prepareStatement("SELECT * FROM TBL_EXTRATO WHERE extrato_codigo_conta  = ?");
             ST.setInt(1, codigoConta);
             ResultSet objResultSet = ST.executeQuery();     
             objResultSet.next();
@@ -125,7 +111,7 @@ public class DAOextrato {
         return obj;
     }
     
-    public static ArrayList<Extrato> recuperarExtratoConta(int codConta, Connection conexao) {
+    public  ArrayList<Extrato> recuperarExtratoConta(int codConta) {
 
         String sql = "SELECT codigo_extrato, descricao_extrato , data_extrato, tipo_extrato, valor_extrato, extrato_codigo_conta FROM TBL_EXTRATO WHERE extrato_codigo_conta = ?";
         
@@ -159,9 +145,9 @@ public class DAOextrato {
         return null;
     }
     
-    public static boolean verificar(int codigoExtrato) {
+    public  boolean verificar(int codigoExtrato) {
 
-        Connection conexao = Fabrica.getConexaoSINGLETON();
+        Connection conexao = Fabrica.getConexaoNOVA();
         String sql = "SELECT * FROM TBL_EXTRATO WHERE codigo_extrato = ?";
             
         try {
