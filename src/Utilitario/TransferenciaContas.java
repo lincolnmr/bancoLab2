@@ -19,7 +19,7 @@ public class TransferenciaContas {
                 Conta contaOrigem = daoConta.recuperar(codContaOrigem);
                 Conta contaDestino = daoConta.recuperar(codContaDestino);
 
-                if(contaOrigem.getSaldoConta()< valor){
+                if(contaOrigem.getSaldoConta() < valor){
                     JOptionPane.showConfirmDialog(null, "Saldo insuficiente");
                     return false;
                 }
@@ -27,6 +27,7 @@ public class TransferenciaContas {
                 atualizarDestino(contaDestino, contaOrigem, valor, conexao);
                 conexao.commit();
                 
+                JOptionPane.showMessageDialog(null, "Transferencia realizada com sucesso");
             } catch (Exception e) {
                 conexao.rollback();
                 System.out.println("Erro na transferencia" + e);
