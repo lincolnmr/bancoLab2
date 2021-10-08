@@ -13,13 +13,13 @@ public class Funcoes {
         Date data = sdf.parse(sData);
         Calendar retorno = Calendar.getInstance();
         retorno.setTime(data);
-        
+
         return retorno;
     }
     
     public static String dateToString(Calendar C){
-    
-        Date data = C.getInstance().getTime();
+        //Date data = C.getInstance().getTime();
+        Date data = C.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(data);
     }

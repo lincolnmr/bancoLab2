@@ -20,11 +20,8 @@ public class CtrlExtrato {
             obj.setValorExtrato(Double.parseDouble(dados[4]));
             obj.setExtratoCodigoConta(Integer.parseInt(dados[5]));   
 
-            if ("0".equals(dados[0])){
-                dao.insert(obj);
-            } else {
-                dao.update(obj);
-            }  
+            dao.insert(obj);
+
         } catch (Exception f) {
             System.out.println("Erro ao gravar objeto na classe controle: " + f.getMessage());
         }
@@ -32,7 +29,7 @@ public class CtrlExtrato {
     
     public static boolean excluir(int codigoExtrato){
         DAOextrato dao = new DAOextrato();
-        return dao.excluir(codigoExtrato);
+        return dao.delete(codigoExtrato);
     }
 
     public static String[] recuperar(int codigoExtrato){
@@ -42,7 +39,6 @@ public class CtrlExtrato {
     }
     
     public static String[][] recuperarExtratoConta(int codigoConta){
-        
         DAOextrato dao = new DAOextrato();
         ArrayList<Extrato> lista = dao.recuperarExtratoConta(codigoConta);
 
@@ -52,6 +48,7 @@ public class CtrlExtrato {
         for (int i = 0; i < lista.size(); i++) {
             matrizReturn[i] = lista.get(i).toArray();
         }
+        
         return matrizReturn;
     }
 }

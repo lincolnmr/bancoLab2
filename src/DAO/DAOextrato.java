@@ -42,7 +42,6 @@ public class DAOextrato {
     }
 
     public  void update(Extrato obj) {
-
         try {
             String sqlUpdate = "UPDATE "
                                 + "TBL_EXTRATO "
@@ -73,8 +72,7 @@ public class DAOextrato {
         }
     }
 
-    public  boolean excluir(int codigoExtrato) {
-
+    public  boolean delete(int codigoExtrato) {
         try {
             PreparedStatement ST = (PreparedStatement) conexao.prepareStatement("DELETE FROM TBL_EXTRATO WHERE codigo_extrato = ?");
             ST.setInt(1, codigoExtrato);
@@ -85,19 +83,19 @@ public class DAOextrato {
         } catch (SQLException err) {
             System.out.println("Erro ao excluir - DAO: " + err.getMessage());
         }
+        
         return false;
     }
     
     public  Extrato recuperar(int codigoConta) {
-        Extrato obj = null;
-
+        Extrato obj = new Extrato();
+        
         try {
             PreparedStatement ST = conexao.prepareStatement("SELECT * FROM TBL_EXTRATO WHERE extrato_codigo_conta  = ?");
             ST.setInt(1, codigoConta);
             ResultSet objResultSet = ST.executeQuery();     
             objResultSet.next();
             
-            obj = new Extrato();
             obj.setCodigoExtrato(objResultSet.getInt("codigo_extrato"));
             obj.setDescricaoExtrato(objResultSet.getString("descricao_extrato"));
             obj.getDataExtrato().setTime(objResultSet.getDate("data_extrato"));
@@ -108,18 +106,17 @@ public class DAOextrato {
         } catch (Exception e) {
             System.err.println("Erro ao recuperar" + e.getMessage());
         }
+        
         return obj;
     }
     
-    public  ArrayList<Extrato> recuperarExtratoConta(int codConta) {
-
-        String sql = "SELECT codigo_extrato, descricao_extrato , data_extrato, tipo_extrato, valor_extrato, extrato_codigo_conta FROM TBL_EXTRATO WHERE extrato_codigo_conta = ?";
-        
+    public ArrayList<Extrato> recuperarExtratoConta(int codConta) {
         Extrato obj = null;
         ArrayList<Extrato> lista = new ArrayList<>();
 
         try {
-            PreparedStatement ST = (PreparedStatement) conexao.prepareStatement(sql);
+            PreparedStatement ST = (PreparedStatement) conexao.prepareStatement(
+                    "SELECT codigo_extrato, descricao_extrato , data_extrato, tipo_extrato, valor_extrato, extrato_codigo_conta FROM TBL_EXTRATO WHERE extrato_codigo_conta = ?");
             ST.setInt(1, codConta);
             ResultSet objResultSet = ST.executeQuery();
             
@@ -142,23 +139,7 @@ public class DAOextrato {
         } catch (SQLException ex) {
             System.out.println("Erro ao recuperar extrato - DAO \n" + ex.getMessage());
         }
+        
         return null;
-    }
-    
-    public  boolean verificar(int codigoExtrato) {
-
-        Connection conexao = Fabrica.getConexaoNOVA();
-        String sql = "SELECT * FROM TBL_EXTRATO WHERE codigo_extrato = ?";
-            
-        try {
-            PreparedStatement ST = conexao.prepareStatement(sql);
-            ST.setInt(1, codigoExtrato);
-            ResultSet objResultSet = ST.executeQuery();
-            if(!objResultSet.next()) return false; 
-            
-        } catch (Exception e) {
-            System.out.println("Erro ao verificar - DAO" + e.getMessage());
-        }
-        return true;
-    }    
+    }   
 }

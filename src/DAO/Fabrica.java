@@ -15,7 +15,7 @@ public class Fabrica {
     private static final String urlconexao = "jdbc:mysql://" + servidor + ":" + porta + "/" + bd;
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 
-    private static Connection abrirConexao() {
+    private static Connection abrirConexao(){
         Connection conexao = null;
         try {
             Class.forName(DRIVER);

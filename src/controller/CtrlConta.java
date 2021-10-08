@@ -29,7 +29,7 @@ public class CtrlConta {
 
     public static boolean excluir(int codigoConta) {
         DAOconta dao = new DAOconta();
-        return dao.excluir(codigoConta);
+        return dao.delete(codigoConta);
     }
 
     public static String[] recuperar(int codigoConta) {
@@ -48,10 +48,5 @@ public class CtrlConta {
             matrizReturn[i] = lista.get(i).toArray();
         }
         return matrizReturn;
-    }
-    
-    public boolean transferir(int contaOrigem, int contaDestino, double valor){
-        
-        return false;
     }
 }

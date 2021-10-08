@@ -2,7 +2,9 @@ package view;
 
 import controller.CtrlConta;
 import controller.CtrlExtrato;
+import Utilitario.TransferenciaContas;
 import java.sql.Connection;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,6 +16,7 @@ public class Tela extends javax.swing.JFrame {
     public Tela() {
         initComponents();
         carregarTabelaConta();
+        modoInativo();
     }
 
     /**
@@ -43,21 +46,15 @@ public class Tela extends javax.swing.JFrame {
         jPaExtrato = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableExtrato = new javax.swing.JTable();
-        jBEGravar = new javax.swing.JButton();
         jBEExcluir = new javax.swing.JButton();
-        jTFData = new javax.swing.JTextField();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTADescricao = new javax.swing.JTextArea();
-        jTFValor = new javax.swing.JTextField();
-        jTFCodConta = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jBENovo = new javax.swing.JButton();
-        jCBTipo = new javax.swing.JComboBox();
-        jPanel1 = new javax.swing.JPanel();
+        jPTransferencia = new javax.swing.JPanel();
+        jTFContaOrigem = new javax.swing.JTextField();
+        jTFValorTransferencia = new javax.swing.JTextField();
+        jTFContaDestino = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jBTransferir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -101,7 +98,7 @@ public class Tela extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Codigo", "Numero", "Agencia", "Saldo"
+                "Código", "Número", "Agência", "Saldo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -118,13 +115,10 @@ public class Tela extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(jTableContas);
-        if (jTableContas.getColumnModel().getColumnCount() > 0) {
-            jTableContas.getColumnModel().getColumn(3).setResizable(false);
-        }
 
-        jLabel1.setText("Número");
+        jLabel1.setText("Número Conta");
 
-        jLabel2.setText("Agencia");
+        jLabel2.setText("Agência");
 
         jLabel3.setText("Saldo");
 
@@ -133,13 +127,12 @@ public class Tela extends javax.swing.JFrame {
         jPaContaLayout.setHorizontalGroup(
             jPaContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPaContaLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-            .addGroup(jPaContaLayout.createSequentialGroup()
-                .addGap(132, 132, 132)
                 .addGroup(jPaContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPaContaLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jScrollPane1))
+                    .addGroup(jPaContaLayout.createSequentialGroup()
+                        .addGap(156, 156, 156)
                         .addGroup(jPaContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jTFNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -150,25 +143,28 @@ public class Tela extends javax.swing.JFrame {
                         .addGap(106, 106, 106)
                         .addGroup(jPaContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTFSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)))
-                    .addGroup(jPaContaLayout.createSequentialGroup()
-                        .addComponent(jBNovo)
-                        .addGap(27, 27, 27)
-                        .addComponent(jBGrava)
-                        .addGap(35, 35, 35)
-                        .addComponent(jBEditar)
-                        .addGap(39, 39, 39)
-                        .addComponent(jBExcluir)
-                        .addGap(27, 27, 27)
-                        .addComponent(jBExtrato)))
-                .addContainerGap(133, Short.MAX_VALUE))
+                            .addComponent(jLabel3))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(jPaContaLayout.createSequentialGroup()
+                .addGap(109, 109, 109)
+                .addComponent(jBNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(jBGrava, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(jBEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39)
+                .addComponent(jBExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(jBExtrato, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(156, Short.MAX_VALUE))
         );
         jPaContaLayout.setVerticalGroup(
             jPaContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPaContaLayout.createSequentialGroup()
                 .addGap(11, 11, 11)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                 .addGroup(jPaContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPaContaLayout.createSequentialGroup()
                         .addGroup(jPaContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -182,14 +178,15 @@ public class Tela extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(10, 10, 10)
                         .addComponent(jTFNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addGap(52, 52, 52)
                 .addGroup(jPaContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBNovo)
-                    .addComponent(jBGrava)
+                    .addGroup(jPaContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jBNovo)
+                        .addComponent(jBGrava))
                     .addComponent(jBEditar)
                     .addComponent(jBExcluir)
                     .addComponent(jBExtrato))
-                .addGap(20, 20, 20))
+                .addGap(22, 22, 22))
         );
 
         jPBanco.addTab("Conta", jPaConta);
@@ -199,11 +196,11 @@ public class Tela extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Codigo", "Descrição", "Data", "Tipo", "Valor", "Codigo Conta"
+                "Código", "Descrição", "Data", "Tipo", "Valor", "Código Conta"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -212,13 +209,6 @@ public class Tela extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTableExtrato);
 
-        jBEGravar.setText("Gravar");
-        jBEGravar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBEGravarActionPerformed(evt);
-            }
-        });
-
         jBEExcluir.setText("Excluir");
         jBEExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -226,115 +216,85 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
-        jTADescricao.setColumns(20);
-        jTADescricao.setRows(5);
-        jScrollPane3.setViewportView(jTADescricao);
-
-        jLabel5.setText("Descrição");
-
-        jLabel6.setText("Data");
-
-        jLabel7.setText("Tipo");
-
-        jLabel8.setText("Valor");
-
-        jLabel9.setText("Código Conta");
-
-        jBENovo.setText("Novo");
-        jBENovo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBENovoActionPerformed(evt);
-            }
-        });
-
-        jCBTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nenhum", "E", "S" }));
-
         javax.swing.GroupLayout jPaExtratoLayout = new javax.swing.GroupLayout(jPaExtrato);
         jPaExtrato.setLayout(jPaExtratoLayout);
         jPaExtratoLayout.setHorizontalGroup(
             jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPaExtratoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 694, Short.MAX_VALUE)
-                    .addGroup(jPaExtratoLayout.createSequentialGroup()
-                        .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(88, 88, 88)
-                        .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(38, 38, 38)
-                        .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jCBTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(38, 38, 38)
-                        .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jTFValor, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(38, 38, 38)
-                        .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTFCodConta, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 773, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPaExtratoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jBENovo)
-                .addGap(74, 74, 74)
-                .addComponent(jBEGravar)
-                .addGap(68, 68, 68)
+            .addGroup(jPaExtratoLayout.createSequentialGroup()
+                .addGap(326, 326, 326)
                 .addComponent(jBEExcluir)
-                .addGap(211, 211, 211))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPaExtratoLayout.setVerticalGroup(
             jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPaExtratoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(jLabel5)
-                .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPaExtratoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(77, Short.MAX_VALUE))
-                    .addGroup(jPaExtratoLayout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTFCodConta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTFValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jCBTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPaExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jBEGravar)
-                            .addComponent(jBEExcluir)
-                            .addComponent(jBENovo))
-                        .addContainerGap())))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jBEExcluir)
+                .addContainerGap())
         );
 
         jPBanco.addTab("Extrato", jPaExtrato);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 714, Short.MAX_VALUE)
+        jLabel4.setText("Conta Origem");
+
+        jLabel10.setText("Valor");
+
+        jLabel11.setText("Conta Destino");
+
+        jBTransferir.setText("Transferir");
+        jBTransferir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTransferirActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPTransferenciaLayout = new javax.swing.GroupLayout(jPTransferencia);
+        jPTransferencia.setLayout(jPTransferenciaLayout);
+        jPTransferenciaLayout.setHorizontalGroup(
+            jPTransferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPTransferenciaLayout.createSequentialGroup()
+                .addGap(155, 155, 155)
+                .addGroup(jPTransferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jBTransferir)
+                    .addGroup(jPTransferenciaLayout.createSequentialGroup()
+                        .addGroup(jPTransferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTFContaOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addGap(84, 84, 84)
+                        .addGroup(jPTransferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTFValorTransferencia, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10))))
+                .addGap(72, 72, 72)
+                .addGroup(jPTransferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addComponent(jTFContaDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(242, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 313, Short.MAX_VALUE)
+        jPTransferenciaLayout.setVerticalGroup(
+            jPTransferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPTransferenciaLayout.createSequentialGroup()
+                .addGap(113, 113, 113)
+                .addGroup(jPTransferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPTransferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTFContaOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTFValorTransferencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTFContaDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(63, 63, 63)
+                .addComponent(jBTransferir)
+                .addContainerGap(74, Short.MAX_VALUE))
         );
 
-        jPBanco.addTab("tab3", jPanel1);
+        jPBanco.addTab("Transferencia", jPTransferencia);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -350,9 +310,19 @@ public class Tela extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
+    private void modoInativo(){
+        jTFNumero.setEnabled(false);
+        jTFAgencia.setEnabled(false);
+        jTFSaldo.setEnabled(false);
+    }
+    
+    private void modoAtivo(){
+        jTFNumero.setEnabled(true);
+        jTFAgencia.setEnabled(true);
+        jTFSaldo.setEnabled(true);
+    }
+    
     private void gravaConta(){
-        
         String[] dados = new String[4];
         int iLinha = jTableContas.getSelectedRow();
         
@@ -372,32 +342,10 @@ public class Tela extends javax.swing.JFrame {
         }
     }
     
-    private void gravaExtrato(){
-        
-        String[] dados = new String[6];
-        int iLinha = jTableExtrato.getSelectedRow();
-        
-        if (ctrl == 0) {
-            dados[0] = "0";
-            dados[1] = jTADescricao.getText();
-            dados[2] = jTFData.getText();
-            dados[3] = String.valueOf(jCBTipo.getSelectedItem());
-            dados[4] = jTFValor.getText();
-            dados[5] = jTFCodConta.getText();
-            CtrlExtrato.inserir(dados);
-        } 
-        else {
-            dados[0] = (String) jTableExtrato.getValueAt(iLinha, 0);
-            dados[1] = jTFNumero.getText();
-            dados[2] = jTFAgencia.getText();
-            dados[3] = jTFSaldo.getText();
-            CtrlExtrato.inserir(dados);
-        }
-    }
-    
     private void jBGravaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGravaActionPerformed
         gravaConta();
         carregarTabelaConta();
+        modoInativo();
     }//GEN-LAST:event_jBGravaActionPerformed
 
     private void jBNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNovoActionPerformed
@@ -405,6 +353,7 @@ public class Tela extends javax.swing.JFrame {
         jTFAgencia.setText("");
         jTFSaldo.setText("");
         ctrl = 0;
+        modoAtivo();
     }//GEN-LAST:event_jBNovoActionPerformed
 
     private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
@@ -416,6 +365,7 @@ public class Tela extends javax.swing.JFrame {
             }
         }
         carregarTabelaConta();
+        modoInativo();
     }//GEN-LAST:event_jBExcluirActionPerformed
 
     private void jTableContasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableContasMousePressed
@@ -426,12 +376,8 @@ public class Tela extends javax.swing.JFrame {
 
     private void jBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditarActionPerformed
         ctrl = 1;
+        modoAtivo();
     }//GEN-LAST:event_jBEditarActionPerformed
-
-    private void jBEGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEGravarActionPerformed
-       gravaExtrato();
-       limparTelaExtrato();
-    }//GEN-LAST:event_jBEGravarActionPerformed
 
     private void jBEExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEExcluirActionPerformed
         int codigoExtrato = Integer.parseInt((String) jTableExtrato.getValueAt(jTableExtrato.getSelectedRow(), 0));
@@ -443,24 +389,25 @@ public class Tela extends javax.swing.JFrame {
         carregarTabelaExtrato();
     }//GEN-LAST:event_jBEExcluirActionPerformed
 
-    private void jBENovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBENovoActionPerformed
-        ctrl = 0;
-        limparTelaExtrato();
-    }//GEN-LAST:event_jBENovoActionPerformed
-
     private void jBExtratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExtratoActionPerformed
         carregarTabelaExtrato();
     }//GEN-LAST:event_jBExtratoActionPerformed
 
-    private void limparTelaExtrato(){
-        jTADescricao.setText("");
-        jTFData.setText("");
-        jTFValor.setText("");
-        jTFCodConta.setText("");
-    }
+    private void jBTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTransferirActionPerformed
+        int codContaOrigem = Integer.parseInt(jTFContaOrigem.getText());
+        int codContaDestino = Integer.parseInt(jTFContaDestino.getText());
+        double valor = Double.parseDouble(jTFValorTransferencia.getText());
+        
+        try {
+            TransferenciaContas.transferir(codContaOrigem, codContaDestino, valor);
+        } catch (SQLException ex) {
+            System.out.println("Erro ao tentar transferir - view " + ex);
+        }
+        
+        carregarTabelaConta();
+    }//GEN-LAST:event_jBTransferirActionPerformed
     
     private void carregarTabelaConta(){
-
         DefaultTableModel model = (DefaultTableModel) jTableContas.getModel();
         model.setNumRows(0);
 
@@ -521,36 +468,30 @@ public class Tela extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBEExcluir;
-    private javax.swing.JButton jBEGravar;
-    private javax.swing.JButton jBENovo;
     private javax.swing.JButton jBEditar;
     private javax.swing.JButton jBExcluir;
     private javax.swing.JButton jBExtrato;
     private javax.swing.JButton jBGrava;
     private javax.swing.JButton jBNovo;
-    private javax.swing.JComboBox jCBTipo;
+    private javax.swing.JButton jBTransferir;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JTabbedPane jPBanco;
+    private javax.swing.JPanel jPTransferencia;
     private javax.swing.JPanel jPaConta;
     private javax.swing.JPanel jPaExtrato;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTADescricao;
     private javax.swing.JTextField jTFAgencia;
-    private javax.swing.JTextField jTFCodConta;
-    private javax.swing.JTextField jTFData;
+    private javax.swing.JTextField jTFContaDestino;
+    private javax.swing.JTextField jTFContaOrigem;
     private javax.swing.JTextField jTFNumero;
     private javax.swing.JTextField jTFSaldo;
-    private javax.swing.JTextField jTFValor;
+    private javax.swing.JTextField jTFValorTransferencia;
     private javax.swing.JTable jTableContas;
     private javax.swing.JTable jTableExtrato;
     // End of variables declaration//GEN-END:variables

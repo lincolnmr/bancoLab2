@@ -41,7 +41,8 @@ public class DAOconta {
     public void update(Conta obj) {
 
        try {
-            PreparedStatement sql = conexao.prepareStatement("UPDATE TBL_CONTA SET numero_conta = ?, agencia_conta = ?, saldo_conta = ? WHERE codigo_conta = ?");
+            PreparedStatement sql = conexao.prepareStatement(
+                    "UPDATE TBL_CONTA SET numero_conta = ?, agencia_conta = ?, saldo_conta = ? WHERE codigo_conta = ?");
             
             sql.setString(1, obj.getNumeroConta());
             sql.setString(2, obj.getAgenciaConta());
@@ -57,7 +58,7 @@ public class DAOconta {
         }
     }
     
-    public boolean excluir(int codigoConta) {
+    public boolean delete(int codigoConta) {
        
         try {
             PreparedStatement ST = (PreparedStatement) conexao.prepareStatement("DELETE FROM TBL_CONTA WHERE codigo_conta = ?");
