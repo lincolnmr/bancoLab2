@@ -34,7 +34,7 @@ public class DAOconta {
             sql.execute();
             System.out.println("Inserido \n");
         } catch (SQLException ex) {
-            System.out.println("Não inserido no DAO - erro: \\n" + ex.getMessage());
+            System.out.println("Não inserido no DAO - erro: \n" + ex.getMessage());
         }
     }
     

@@ -23,8 +23,8 @@ public class TransferenciaContas {
                     JOptionPane.showConfirmDialog(null, "Saldo insuficiente");
                     return false;
                 }
-                atualizarOrigem(contaOrigem, contaDestino, valor, conexao);
-                atualizarDestino(contaDestino, contaOrigem, valor, conexao);
+                
+                atualizar(contaOrigem, contaDestino, valor, conexao);
                 conexao.commit();
                 
                 JOptionPane.showMessageDialog(null, "Transferencia realizada com sucesso");
@@ -35,7 +35,8 @@ public class TransferenciaContas {
             return true;
         }
         
-        public static boolean atualizarOrigem(Conta contaOrigem, Conta contaDestino, double valor, Connection conexao){
+        public static boolean atualizar(Conta contaOrigem, Conta contaDestino, double valor, Connection conexao){
+            
             try {
                 DAOconta daoConta = new DAOconta(conexao);           
                 contaOrigem.setSaldoConta(contaOrigem.getSaldoConta() - valor);
@@ -62,10 +63,6 @@ public class TransferenciaContas {
                 return false;
             }
             
-        return true;    
-        }
-        
-        public static boolean atualizarDestino(Conta contaDestino, Conta contaOrigem, double valor, Connection conexao){
             try {
                 DAOconta daoConta = new DAOconta(conexao);           
                 contaDestino.setSaldoConta(contaDestino.getSaldoConta() + valor);
@@ -91,8 +88,8 @@ public class TransferenciaContas {
                 System.out.println("Erro ao inserir extrato da conta destino - Transferencia " + e);
                 return false;
             }
-            
-        return true;    
+        return true;
+        
         }
 }
 
